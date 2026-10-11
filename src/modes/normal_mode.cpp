@@ -1,4 +1,5 @@
 #include "modes/normal_mode.hpp"
+#include "modes/insert_mode.hpp"
 #include "app/editor.hpp"
 
 namespace nulo::modes {
@@ -6,8 +7,8 @@ namespace nulo::modes {
 void NormalMode::handle(const input::Key& k, Editor& ed) {
     if (k.code == input::KeyCode::Char) {
         switch (k.ch) {
-            case 'q': ed.quit();
-            return;
+            case 'q': ed.quit(); return;
+            case 'i': ed.set_mode(std::make_unique<InsertMode>()); return;
         }
     }
 

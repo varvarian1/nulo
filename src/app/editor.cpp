@@ -33,6 +33,39 @@ void Editor::move_cursor(int drow, int dcol) {
     viewport_.follow(cursor_, contentHeight);
 }
 
+void Editor::insert_char(char c) {
+    doc_.insert(cursor_.row, cursor_.col, c);
+    cursor_.col += 1;
+}
+
+void Editor::insert_newline() {
+    doc_.insert_newline(cursor_.row, cursor_.col);
+    cursor_.row += 1;
+    cursor_.col = 0;
+}
+
+void Editor::delete_char() {
+    doc_.erase(cursor_.row, cursor_.col);
+    cursor_.clamp(doc_);
+}
+
+void Editor::backspace() {
+    if (cursor_.col == 0 && cursor_.row == 0) return;
+    if (cursor_.col > 0) {
+        doc_.erase_before(cursor_.row, cursor_.col);
+        cursor_.col -= 1;
+    } else {
+        int prev_len = static_cast<int>(doc_.line(cursor_.row - 1).size());
+        doc_.erase_before(cursor_.row, cursor_.col);
+        cursor_.row -= 1;
+        cursor_.col = prev_len;
+    }
+}
+
+void Editor::set_mode(std::unique_ptr<modes::Mode> m) {
+    mode_ = std::move(m);
+}
+
 void Editor::run() {
     while (running_) {
         render();
