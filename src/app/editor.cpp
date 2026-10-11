@@ -16,7 +16,9 @@ Editor::Editor(Terminal& term, std::string filepath)
 
 void Editor::render() {
     std::string status = "-- " + mode_->name() + " --";
-    if (!last_key_desc_.empty()) {
+    if (!status_message_.empty()) {
+        status += "     " + status_message_;
+    } else if (!last_key_desc_.empty()) {
         status += "   Last key: " + last_key_desc_;
     }
     renderer_.draw(doc_, cursor_, viewport_, status);
@@ -66,12 +68,25 @@ void Editor::set_mode(std::unique_ptr<modes::Mode> m) {
     mode_ = std::move(m);
 }
 
+void Editor::save() {
+    if (doc_.save()) {
+        set_status("saved");
+    } else {
+        set_status("save failed");
+    }
+}
+
+void Editor::set_status(std::string_view msg) {
+    status_message_ = msg;
+}
+
 void Editor::run() {
     while (running_) {
         render();
         input::Key k = input::read_key();
         if (k.code != input::KeyCode::None) {
             last_key_desc_ = key_to_string(k);
+            status_message_.clear();
             mode_->handle(k, *this);
         }
     }
