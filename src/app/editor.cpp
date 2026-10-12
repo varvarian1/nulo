@@ -15,11 +15,20 @@ Editor::Editor(Terminal& term, std::string filepath)
       mode_(std::make_unique<modes::NormalMode>()) {}
 
 void Editor::render() {
-    std::string status = "-- " + mode_->name() + " --";
-    if (!status_message_.empty()) {
-        status += "     " + status_message_;
-    } else if (!last_key_desc_.empty()) {
-        status += "   Last key: " + last_key_desc_;
+    std::string status;
+    std::string cmd = mode_->command_line();
+    
+    if (!cmd.empty()) {
+        status = "~" + cmd;
+    } else if (mode_->name() == "TILDE") {
+        status = "~";  // empty buffer, still show tilde
+    } else {
+        status = "-- " + mode_->name() + " --";
+        if (!status_message_.empty()) {
+            status += "   " + status_message_;
+        } else if (!last_key_desc_.empty()) {
+            status += "   Last key: " + last_key_desc_;
+        }
     }
     renderer_.draw(doc_, cursor_, viewport_, status);
 }

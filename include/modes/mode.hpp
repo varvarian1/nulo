@@ -14,6 +14,8 @@ public:
     virtual ~Mode() = default;
     virtual void handle(const input::Key& k, Editor& ed) = 0;
     virtual std::string name() const = 0;
+
+    virtual std::string command_line() const { return {}; }
 };
 
 }

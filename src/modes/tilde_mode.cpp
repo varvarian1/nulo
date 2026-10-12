@@ -11,21 +11,39 @@ void TildeMode::handle(const input::Key& k, Editor& ed) {
         return;
     }
 
-    if (k.code != input::KeyCode::Char) return;
+    // backspace: remove last char from buffer
+    if (k.code == input::KeyCode::Backspace) {
+        if (!buffer_.empty()) buffer_.pop_back();
+        return;
+    }
 
-    switch (k.ch) {
-        case 's':
-            ed.save();
-            return;  // stay in TildeMode
+    // enter: execute the command
+    if (k.code == input::KeyCode::Enter) {
+        execute(ed);
+        return;
+    }
 
-        case 'q':
-            ed.quit();
-            return;
- 
-        default:
-            // unknown tilde command - cancel
-            ed.set_mode(std::make_unique<NormalMode>());
-            return;
+    // regular character: append to buffer
+    if (k.code == input::KeyCode::Char && !k.ctrl && !k.alt) {
+        buffer_ += k.ch;
+        return;
+    }
+}
+
+void TildeMode::execute(Editor& ed) {
+    const std::string cmd = buffer_;
+
+    ed.set_mode(std::make_unique<NormalMode>());
+
+    if (cmd == "s") {
+        ed.save();
+    } else if (cmd == "q") {
+        ed.quit();
+    } else if (cmd == "sq" || cmd == "qs") {
+        ed.save();
+        ed.quit();
+    } else {
+        ed.set_status("unknown command: " + cmd);
     }
 }
 
