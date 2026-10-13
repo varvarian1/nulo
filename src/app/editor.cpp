@@ -46,6 +46,14 @@ void Editor::move_cursor(int drow, int dcol) {
     viewport_.follow(cursor_, contentHeight);
 }
 
+void Editor::move_to_line_start() {
+    cursor_.col = 0;
+}
+
+void Editor::move_to_line_end() {
+    cursor_.col = static_cast<int>(doc_.line(cursor_.row).size());
+}
+
 void Editor::insert_char(char c) {
     doc_.insert(cursor_.row, cursor_.col, c);
     cursor_.col += 1;

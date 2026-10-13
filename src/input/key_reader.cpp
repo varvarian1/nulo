@@ -59,10 +59,18 @@ Key read_key() {
             if (seq[0] == 'O') seq[0] = '[';
             
             // now match full sequence
-            if (seq == "[A") return {KeyCode::ArrowUp};
-            if (seq == "[B") return {KeyCode::ArrowDown};
-            if (seq == "[C") return {KeyCode::ArrowRight};
-            if (seq == "[D") return {KeyCode::ArrowLeft};
+            if (seq == "[A")    return {KeyCode::ArrowUp};
+            if (seq == "[B")    return {KeyCode::ArrowDown};
+            if (seq == "[C")    return {KeyCode::ArrowRight};
+            if (seq == "[D")    return {KeyCode::ArrowLeft};
+
+            if (seq == "[H")    return {KeyCode::Home};
+            if (seq == "[F")    return {KeyCode::End};
+            if (seq == "[1~")   return {KeyCode::Home};
+            if (seq == "[4~")   return {KeyCode::End};
+            if (seq == "[3~")   return {KeyCode::Delete};
+            if (seq == "[7~")   return {KeyCode::Home};
+            if (seq == "[8~")   return {KeyCode::End};
 
             return {KeyCode::None};
         }

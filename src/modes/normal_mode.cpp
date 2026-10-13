@@ -15,10 +15,27 @@ void NormalMode::handle(const input::Key& k, Editor& ed) {
     }
 
     switch (k.code) {
-        case input::KeyCode::ArrowUp:       ed.move_cursor(-1, 0); break;
-        case input::KeyCode::ArrowDown:     ed.move_cursor(1, 0);  break;
-        case input::KeyCode::ArrowLeft:     ed.move_cursor(0, -1); break;
-        case input::KeyCode::ArrowRight:    ed.move_cursor(0, 1);  break;
+        case input::KeyCode::ArrowUp: {
+            ed.move_cursor(-1, 0); break;
+        }
+        case input::KeyCode::ArrowDown: {
+            ed.move_cursor(1, 0); break;
+        }
+        case input::KeyCode::ArrowLeft: {
+            ed.move_cursor(0, -1); break;
+        }
+        case input::KeyCode::ArrowRight: {
+            ed.move_cursor(0, 1); break;
+        }
+        case input::KeyCode::Home: {
+            ed.move_to_line_start(); break;
+        }
+        case input::KeyCode::End: {
+            ed.move_to_line_end(); break;
+        }
+        case input::KeyCode::Delete: {
+            ed.delete_char(); break;
+        }
         default: break;
     }
 }

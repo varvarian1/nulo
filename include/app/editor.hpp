@@ -38,7 +38,8 @@ public:
     bool is_running() const { return running_; }
 
     void move_cursor(int drow, int dcol);
-    void move_cursor_to(int row, int col);
+    void move_to_line_start();
+    void move_to_line_end();
 
     void insert_char(char c);
     void insert_newline();

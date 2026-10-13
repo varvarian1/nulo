@@ -13,6 +13,9 @@ enum class KeyCode {
     ArrowDown,
     ArrowLeft,
     ArrowRight,
+    Home,
+    End,
+    Delete
 };
 
 struct Key {

@@ -9,6 +9,32 @@ void InsertMode::handle(const input::Key& k, Editor& ed) {
         ed.set_mode(std::make_unique<NormalMode>());
         return;
     }
+
+    switch (k.code) {
+        case input::KeyCode::ArrowUp: {
+            ed.move_cursor(-1, 0); return;
+        }
+        case input::KeyCode::ArrowDown: {
+            ed.move_cursor(1, 0); return;
+        }
+        case input::KeyCode::ArrowLeft: {
+            ed.move_cursor(0, -1); return;
+        }
+        case input::KeyCode::ArrowRight: {
+            ed.move_cursor(0, 1); return;
+        }
+        case input::KeyCode::Home: { 
+            ed.move_to_line_start(); return;
+        }
+        case input::KeyCode::End: {
+            ed.move_to_line_end(); return;
+        }
+        case input::KeyCode::Delete: { 
+            ed.delete_char(); return;
+        }
+        default: break;
+    }
+
     if (k.code == input::KeyCode::Enter) {
         ed.insert_newline();
         return;
