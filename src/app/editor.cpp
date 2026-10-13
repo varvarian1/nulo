@@ -23,7 +23,9 @@ void Editor::render() {
     } else if (mode_->name() == "TILDE") {
         status = "~";  // empty buffer, still show tilde
     } else {
-        status = "-- " + mode_->name() + " --";
+        status = "-- " + mode_->name();
+        if (dirty_) status += " [+]";
+        status += " --";
         if (!status_message_.empty()) {
             status += "   " + status_message_;
         } else if (!last_key_desc_.empty()) {
@@ -47,17 +49,20 @@ void Editor::move_cursor(int drow, int dcol) {
 void Editor::insert_char(char c) {
     doc_.insert(cursor_.row, cursor_.col, c);
     cursor_.col += 1;
+    mark_dirty();
 }
 
 void Editor::insert_newline() {
     doc_.insert_newline(cursor_.row, cursor_.col);
     cursor_.row += 1;
     cursor_.col = 0;
+    mark_dirty();
 }
 
 void Editor::delete_char() {
     doc_.erase(cursor_.row, cursor_.col);
     cursor_.clamp(doc_);
+    mark_dirty();
 }
 
 void Editor::backspace() {
@@ -71,6 +76,7 @@ void Editor::backspace() {
         cursor_.row -= 1;
         cursor_.col = prev_len;
     }
+    mark_dirty();
 }
 
 void Editor::set_mode(std::unique_ptr<modes::Mode> m) {
@@ -80,6 +86,7 @@ void Editor::set_mode(std::unique_ptr<modes::Mode> m) {
 void Editor::save() {
     if (doc_.save()) {
         set_status("saved");
+        clear_dirty();
     } else {
         set_status("save failed");
     }

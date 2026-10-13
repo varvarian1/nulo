@@ -38,10 +38,19 @@ void TildeMode::execute(Editor& ed) {
     if (cmd == "s") {
         ed.save();
     } else if (cmd == "q") {
+        if (ed.is_dirty()) {
+            ed.set_status("unsaved changes");
+            return;
+        }
+        ed.quit();
+    } else if (cmd == "q!") {
         ed.quit();
     } else if (cmd == "sq" || cmd == "qs") {
         ed.save();
-        ed.quit();
+        if (!ed.is_dirty()) {
+            ed.quit();
+        }
+        return;
     } else {
         ed.set_status("unknown command: " + cmd);
     }

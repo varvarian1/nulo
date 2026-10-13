@@ -48,6 +48,10 @@ public:
     void save();
     void set_status(std::string_view msg);
 
+    bool is_dirty() const { return dirty_; }
+    void mark_dirty() { dirty_ = true; }
+    void clear_dirty() { dirty_ = false; }
+
     void set_mode(std::unique_ptr<Mode> m);
 
 private:
@@ -62,9 +66,10 @@ private:
     std::unique_ptr<modes::Mode> mode_;
 
     std::string last_key_desc_;
-
     std::string status_message_;
+    
     bool running_ = true;
+    bool dirty_ = false;
 };
 
 }
